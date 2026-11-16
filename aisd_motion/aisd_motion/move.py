@@ -25,18 +25,18 @@ class Move(Node):
         linear = 0.0 #linear velocity of the robot (how fast it moves forwards or backwards)
         if msg.xindex > 0.55: #closer to 1 means it's inclined to the right
             self.get_logger().info('right') # log message to show that the robot is turning right
-            angle = -2.0 # turn to the right
+            angle = -0.1 # turn to the right
         elif msg.xindex < 0.45: #closer to 0 means it's inclined to the left
             self.get_logger().info('left') # log message to show that the robot is turning left
-            angle = 2.0 # turn to the left
+            angle = 0.1 # turn to the left
         else:
             angle = 0.0 # set angle to 0 if the index finger is in the middle
         
         #if the index finger is to the right of the pinky finger, 
-        # the hand is turned back to the camera (robot moves forward at 2.0), otherwise (palm facing the camera), it should stay still
+        # the hand is turned back to the camera (robot moves forward at 0.5), otherwise (palm facing the camera), it should stay still
         if msg.xindex > msg.xpinky:
             self.get_logger().info('come')
-            linear = 2.0
+            linear = 0.5
         else:
             self.get_logger().info('stay')
             linear = 0.0
