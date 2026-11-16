@@ -33,10 +33,10 @@ class Move(Node):
             angle = 0.0 # set angle to 0 if the index finger is in the middle
         
         #if the index finger is to the right of the pinky finger, 
-        # the hand is turned back to the camera (robot moves forward at 0.5), otherwise (palm facing the camera), it should stay still
+        # the hand is turned back to the camera (robot moves forward at 0.2), otherwise (palm facing the camera), it should stay still
         if msg.xindex > msg.xpinky:
             self.get_logger().info('come')
-            linear = 0.5
+            linear = 0.2
         else:
             self.get_logger().info('stay')
             linear = 0.0
