@@ -1,29 +1,30 @@
 from setuptools import find_packages, setup
 
-package_name = 'aisd_vision'
+package_name = "aisd_vision"
 
 setup(
     name=package_name,
-    version='0.0.0',
-    packages=find_packages(exclude=['test']),
+    version="0.0.0",
+    packages=find_packages(exclude=["test"]),
     data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
+        ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
+        ("share/" + package_name, ["package.xml"]),
     ],
-    install_requires=['setuptools'],
+    install_requires=["setuptools"],
     zip_safe=True,
-    maintainer='aisd',
-    maintainer_email='gabrielapinheiro129@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer="Gabriela Pinheiro",
+    maintainer_email="gabrielapinheiro129@gmail.com",
+    description="Vision nodes: publishes camera frames and detects hand position with MediaPipe",
+    license="no license",
     extras_require={
-        'test': [
-            'pytest',
+        "test": [
+            "pytest",
         ],
     },
     entry_points={
-        'console_scripts': [
+        "console_scripts": [
+            "image_publisher = aisd_vision.image_publisher:main",
+            "hands = aisd_vision.hands:main",
         ],
     },
 )
