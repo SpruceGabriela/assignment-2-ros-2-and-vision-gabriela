@@ -13,10 +13,10 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='aisd',
+    maintainer='Gabriela Pinheiro',
     maintainer_email='gabrielapinheiro129@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='Move node: subscribe to Hands messages and converts messages to Twist velocity commands',
+    license='no license',
     extras_require={
         'test': [
             'pytest',
@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'move = aisd_motion.move:main',
         ],
     },
 )
