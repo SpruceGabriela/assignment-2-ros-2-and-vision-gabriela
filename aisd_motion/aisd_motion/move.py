@@ -16,6 +16,15 @@ class Move(Node):
         self.subscription  # prevent unused variable warning
         self.vel_publisher = self.create_publisher(Twist, 'cmd_vel', 10) #creates publisher that will publish the topic (channel between nodes) cmd_vel with max queue size of 10
 
+        # ROS parameters for the speeds, so they can be changed when running the node without editing the code:
+        # ros2 run aisd_motion move --ros-args -p linear_speed:=2.0 -p angular_speed:=2.0
+        # The default values (0.2 and 0.1) are the speeds suggested for the Create3 robot
+        self.declare_parameter('linear_speed', 0.2) # forward speed used when the hand says 'come'
+        self.declare_parameter('angular_speed', 0.1) # turning speed used when the index finger is to the left or right
+        self.linear_speed = self.get_parameter('linear_speed').value # read the value given on the command line (or the default)
+        self.angular_speed = self.get_parameter('angular_speed').value
+        self.get_logger().info(f'linear_speed={self.linear_speed}, angular_speed={self.angular_speed}') # show which speeds are being used
+
     def listener_callback(self, msg):
         """
             listener_callback is called when a new message is received from the topic cmd_hand.
@@ -25,18 +34,18 @@ class Move(Node):
         linear = 0.0 #linear velocity of the robot (how fast it moves forwards or backwards)
         if msg.xindex > 0.55: #closer to 1 means it's inclined to the right
             self.get_logger().info('right') # log message to show that the robot is turning right
-            angle = -0.1 # turn to the right
+            angle = -self.angular_speed # negative turns to the right (clockwise)
         elif msg.xindex < 0.45: #closer to 0 means it's inclined to the left
             self.get_logger().info('left') # log message to show that the robot is turning left
-            angle = 0.1 # turn to the left
+            angle = self.angular_speed # positive turns to the left (counter-clockwise)
         else:
             angle = 0.0 # set angle to 0 if the index finger is in the middle
         
         #if the index finger is to the right of the pinky finger, 
-        # the hand is turned back to the camera (robot moves forward at 0.2), otherwise (palm facing the camera), it should stay still
+        # the hand is turned back to the camera (robot moves forward at linear_speed), otherwise (palm facing the camera), it should stay still
         if msg.xindex > msg.xpinky:
             self.get_logger().info('come')
-            linear = 0.2
+            linear = self.linear_speed
         else:
             self.get_logger().info('stay')
             linear = 0.0
